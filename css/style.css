@@ -1,0 +1,899 @@
+  /* ==========================================================================
+    Design Tokens & CSS Variables (Ethan Chng Aesthetic - Light & Dark)
+    ========================================================================== */
+  :root {
+    /* Light Theme (Matches Ethan Chng screenshot) */
+    --bg-primary: #ffffff;
+    --bg-secondary: #f8f8fa;
+    --bg-card: #f5f5f7;
+    --bg-card-hover: #ececed;
+
+    --border-subtle: #e5e5ea;
+    --border-divider: #efeff2;
+
+    --text-primary: #111111;
+    --text-secondary: #6e6e73;
+    --text-tertiary: #a1a1a6;
+    --text-nav-header: #9a9aa0;
+
+    --accent-color: #000000;
+    --handwriting-stroke: #111111;
+
+    --radius-badge: 6px;
+    --radius-card: 10px;
+    --radius-full: 9999px;
+
+    --font-main: -apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-mono: ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+
+    --sidebar-width: 125px;
+    --transition-normal: 0.25s ease;
+  }
+
+  [data-theme="dark"] {
+    /* Dark Theme */
+    --bg-primary: #0a0a0c;
+    --bg-secondary: #121215;
+    --bg-card: #16161a;
+    --bg-card-hover: #1e1e24;
+
+    --border-subtle: #24242a;
+    --border-divider: #1f1f24;
+
+    --text-primary: #f2f2f5;
+    --text-secondary: #9a9aa2;
+    --text-tertiary: #63636b;
+    --text-nav-header: #575760;
+
+    --accent-color: #ffffff;
+    --handwriting-stroke: #ffffff;
+  }
+
+  /* ==========================================================================
+    Base & Reset
+    ========================================================================== */
+  *, *::before, *::after {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+  }
+
+  html {
+    scroll-behavior: smooth;
+    font-family: var(--font-main);
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: background-color var(--transition-normal), color var(--transition-normal);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  body {
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  button {
+    font: inherit;
+    cursor: pointer;
+    border: none;
+    background: none;
+  }
+
+  /* ==========================================================================
+    Lenis Smooth Scrolling Core
+    ========================================================================== */
+  html.lenis, html.lenis body {
+    height: auto;
+  }
+
+  .lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+  }
+
+  .lenis.lenis-smooth [data-lenis-prevent] {
+    overscroll-behavior: contain;
+  }
+
+  .lenis.lenis-stopped {
+    overflow: hidden;
+  }
+
+  /* ==========================================================================
+    Screen 1: Full Viewport Apple "Hello" Hero Screen (100vh)
+    ========================================================================== */
+  .hero-screen {
+    min-height: 100vh;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    background-color: var(--bg-primary);
+    transition: background-color var(--transition-normal);
+    padding: 2rem;
+    text-align: center;
+    overflow: hidden;
+    z-index: 1;
+    will-change: transform, opacity;
+  }
+
+  .hero-screen svg.hello__svg {
+    width: min(85vw, 760px);
+    max-width: 760px;
+    height: auto;
+    overflow: visible;
+    filter: drop-shadow(0 0 16px rgba(0, 0, 0, 0.03));
+    cursor: pointer;
+    transform-origin: center center;
+    will-change: transform, opacity, filter;
+  }
+
+  .handwriting {
+    fill: none;
+    stroke: var(--handwriting-stroke);
+    stroke-width: 32px;
+    stroke-linecap: round;
+    stroke-miterlimit: 10;
+    stroke-linejoin: round;
+    stroke-dasharray: 1;
+    stroke-dashoffset: 1;
+    transition: stroke var(--transition-normal);
+  }
+
+  .handwriting.is-drawing {
+    animation: drawHello 5.2s cubic-bezier(0.35, 0, 0.15, 1) forwards;
+  }
+
+  @keyframes drawHello {
+    0% { stroke-dashoffset: 1; }
+    8% { stroke-dashoffset: 1; }
+    100% { stroke-dashoffset: 0; }
+  }
+
+  /* ==========================================================================
+    Screen 2+: Ethan Chng Split Layout (Sidebar + Main Canvas)
+    ========================================================================== */
+  .site-wrapper {
+    width: 100%;
+    max-width: none;
+    margin: 0;
+    padding: 3.5rem 2.25rem 5rem 2rem;
+    display: flex;
+    gap: 3.25rem;
+    position: relative;
+    z-index: 2;
+    background-color: var(--bg-primary);
+    border-top: 1px solid var(--border-divider);
+    box-shadow: 0 -20px 40px rgba(0, 0, 0, 0.04);
+    transition: background-color var(--transition-normal), border-color var(--transition-normal), box-shadow var(--transition-normal);
+    will-change: transform, opacity;
+  }
+
+  [data-theme="dark"] .site-wrapper {
+    box-shadow: 0 -25px 50px rgba(0, 0, 0, 0.5);
+  }
+
+  /* ==========================================================================
+    Left Sticky Sidebar (Matches screenshot)
+    ========================================================================== */
+  .site-sidebar {
+    width: var(--sidebar-width);
+    flex-shrink: 0;
+    position: sticky;
+    top: 3rem;
+    height: fit-content;
+    display: flex;
+    flex-direction: column;
+    gap: 2.25rem;
+  }
+
+  /* Identity Badge (like the Chinese characters box in the screenshot) */
+  .brand-badge-box {
+    width: 44px;
+    height: 44px;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-badge);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    background-color: var(--bg-primary);
+    color: var(--text-primary);
+    transition: border-color var(--transition-normal);
+  }
+
+  .brand-badge-box:hover {
+    border-color: var(--text-primary);
+  }
+
+  .sidebar-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.55rem;
+  }
+
+  .sidebar-group-title {
+    font-size: 0.68rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.09em;
+    color: var(--text-nav-header);
+    margin-bottom: 0.25rem;
+  }
+
+  .sidebar-nav-list {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+  }
+
+  .sidebar-link {
+    font-size: 0.84rem;
+    color: var(--text-secondary);
+    font-weight: 400;
+    transition: color var(--transition-normal);
+    display: inline-block;
+    white-space: nowrap;
+  }
+
+  .sidebar-link:hover,
+  .sidebar-link.active {
+    color: var(--text-primary);
+  }
+
+  /* Sidebar Theme Toggle Button */
+  .sidebar-theme-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-size: 0.8rem;
+    color: var(--text-tertiary);
+    margin-top: 1rem;
+    padding: 0.4rem 0.65rem;
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-badge);
+    width: fit-content;
+    transition: all var(--transition-normal);
+  }
+
+  .sidebar-theme-toggle:hover {
+    color: var(--text-primary);
+    border-color: var(--text-secondary);
+  }
+
+  .sidebar-theme-toggle svg {
+    width: 14px;
+    height: 14px;
+    stroke: currentColor;
+    stroke-width: 2;
+    fill: none;
+  }
+
+  .icon-sun { display: none; }
+  .icon-moon { display: block; }
+  [data-theme="dark"] .icon-sun { display: block; }
+  [data-theme="dark"] .icon-moon { display: none; }
+
+  /* ==========================================================================
+    Right Main Content Canvas
+    ========================================================================== */
+  .main-canvas {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 4rem;
+  }
+
+  /* ==========================================================================
+    About Section: Identical Width Columns with Contrasting Box Heights
+    ========================================================================== */
+  .about-editorial-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 2.75rem;
+    margin-bottom: 3rem;
+  }
+
+  .about-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr; /* Exactly equal column widths */
+    gap: 3.5rem;
+    align-items: center;
+  }
+
+  .about-text-col {
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .about-media-col {
+    width: 100%;
+  }
+
+  /* Box 1 & Box 2 have IDENTICAL width (100% of the 1fr column) */
+  /* Box 1 (RISC-V): Longer length/height */
+  .about-box-1 {
+    width: 100%;
+    aspect-ratio: 16 / 12.5; /* Longer / taller height */
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: border-color var(--transition-normal);
+    transform: translateY(90px) scaleX(1.05) ;
+    clip-path: inset(0 0 0 -10px round 14px);
+  }
+
+  /* Box 2 (Presentation): Shorter length/height, identical width */
+  .about-box-2 {
+    width: 100%;
+    aspect-ratio: 16 / 7.5; /* Shorter height, identical width */
+    background-color: var(--bg-card);
+    border: 1px solid var(--border-strong);
+    border-radius: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.06);
+    transition: border-color var(--transition-normal);
+
+
+    transform-origin: top;
+    transform: translateY(-50px) scaleY(1.35) scaleX(1.05);
+    clip-path: inset(10px -1px 0 0 round 14px);
+  }
+
+  .about-box-1:hover,
+  .about-box-2:hover {
+    border-color: var(--text-primary);
+  }
+
+  /* ==========================================================================
+     ABOUT SECTION — INDEPENDENT TEXT CONTROLS
+     ========================================================================== */
+
+  /* --------------------------------------------------------------------------
+     TEXT CONTAINER GROUPS (Move entire Top-Left or Bottom-Right text group)
+     -------------------------------------------------------------------------- */
+
+  /* Top-Left Text Group Container */
+  .about-text-group-top {
+    /* MOVE RIGHT: positive X (e.g. 15px) | LEFT: negative X (e.g. -15px) */
+    --group-top-x: -16px;
+    /* MOVE DOWN: positive Y (e.g. 15px) | UP: negative Y (e.g. -15px) */
+    --group-top-y: 15px;
+    transform: translate(var(--group-top-x), var(--group-top-y));
+
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* Bottom-Right Text Group Container */
+  .about-text-group-bottom {
+    /* MOVE RIGHT: positive X (e.g. 15px) | LEFT: negative X (e.g. -15px) */
+    --group-bottom-x: -16px;
+    /* MOVE DOWN: positive Y (e.g. 15px) | UP: negative Y (e.g. -15px) */
+    --group-bottom-y: 50px;
+    transform: translate(var(--group-bottom-x), var(--group-bottom-y));
+
+    width: 100%;
+    max-width: 100%;
+  }
+
+  /* --------------------------------------------------------------------------
+     SUBSECTION 1: TOP-LEFT HEADING
+     -------------------------------------------------------------------------- */
+  .about-heading-top {
+    /* Horizontal & Vertical Movement */
+    /* MOVE RIGHT: positive X (e.g. 10px) | LEFT: negative X (e.g. -10px) */
+    --top-heading-x: 0px;
+    /* MOVE DOWN: positive Y (e.g. 10px) | UP: negative Y (e.g. -10px) */
+    --top-heading-y: 0px;
+    transform: translate(var(--top-heading-x), var(--top-heading-y));
+
+    /* Font Size & Weight */
+    font-size: clamp(1.4rem, 2.2vw, 1.95rem);
+    font-weight: 500;
+
+    /* Line Height & Letter Spacing */
+    line-height: 1.24;
+    letter-spacing: -0.025em;
+
+    /* Text Width & Maximum Width */
+    width: 100%;
+    max-width: 100%;
+
+    /* Text Color & Opacity */
+    color: var(--text-primary);
+    opacity: 1;
+
+    /* Text Alignment */
+    text-align: left;
+
+    /* Spacing between Heading and Description */
+    margin-bottom: 0.85rem;
+  }
+
+  /* --------------------------------------------------------------------------
+     SUBSECTION 2: TOP-LEFT DESCRIPTION
+     -------------------------------------------------------------------------- */
+  .about-desc-top {
+    /* Horizontal & Vertical Movement */
+    /* MOVE RIGHT: positive X (e.g. 10px) | LEFT: negative X (e.g. -10px) */
+    --top-desc-x: 0px;
+    /* MOVE DOWN: positive Y (e.g. 10px) | UP: negative Y (e.g. -10px) */
+    --top-desc-y: 0px;
+    transform: translate(var(--top-desc-x), var(--top-desc-y));
+
+    /* Font Size & Weight */
+    font-size: 0.925rem;
+    font-weight: 400;
+
+    /* Line Height & Letter Spacing */
+    line-height: 1.55;
+    letter-spacing: 0em;
+
+    /* Text Width & Maximum Width */
+    width: 100%;
+    max-width: 100%;
+
+    /* Text Color & Opacity */
+    color: var(--text-secondary);
+    opacity: 1;
+
+    /* Text Alignment */
+    text-align: left;
+  }
+
+  /* --------------------------------------------------------------------------
+     SUBSECTION 3: BOTTOM-RIGHT HEADING
+     -------------------------------------------------------------------------- */
+  .about-heading-bottom {
+    /* Horizontal & Vertical Movement */
+    /* MOVE RIGHT: positive X (e.g. 10px) | LEFT: negative X (e.g. -10px) */
+    --bottom-heading-x: 0px;
+    /* MOVE DOWN: positive Y (e.g. 10px) | UP: negative Y (e.g. -10px) */
+    --bottom-heading-y: 0px;
+    transform: translate(var(--bottom-heading-x), var(--bottom-heading-y));
+
+    /* Font Size & Weight */
+    font-size: clamp(1.4rem, 2.2vw, 1.95rem);
+    font-weight: 500;
+
+    /* Line Height & Letter Spacing */
+    line-height: 1.24;
+    letter-spacing: -0.025em;
+
+    /* Text Width & Maximum Width */
+    width: 100%;
+    max-width: 100%;
+
+    /* Text Color & Opacity */
+    color: var(--text-primary);
+    opacity: 1;
+
+    /* Text Alignment */
+    text-align: left;
+
+    /* Spacing between Heading and Description */
+    margin-bottom: 0.85rem;
+  }
+
+  /* --------------------------------------------------------------------------
+     SUBSECTION 4: BOTTOM-RIGHT DESCRIPTION
+     -------------------------------------------------------------------------- */
+  .about-desc-bottom {
+    /* Horizontal & Vertical Movement */
+    /* MOVE RIGHT: positive X (e.g. 10px) | LEFT: negative X (e.g. -10px) */
+    --bottom-desc-x: 0px;
+    /* MOVE DOWN: positive Y (e.g. 10px) | UP: negative Y (e.g. -10px) */
+    --bottom-desc-y: 0px;
+    transform: translate(var(--bottom-desc-x), var(--bottom-desc-y));
+
+    /* Font Size & Weight */
+    font-size: 0.925rem;
+    font-weight: 400;
+
+    /* Line Height & Letter Spacing */
+    line-height: 1.55;
+    letter-spacing: 0em;
+
+    /* Text Width & Maximum Width */
+    width: 100%;
+    max-width: 100%;
+
+    /* Text Color & Opacity */
+    color: var(--text-secondary);
+    opacity: 1;
+
+    /* Text Alignment */
+    text-align: left;
+  }
+
+  /* ==========================================================================
+    Section Dividers & Labels (e.g., "CRAFT" in screenshot)
+    ========================================================================== */
+  .canvas-section {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+  }
+
+  .section-tag-line {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid var(--border-divider);
+  }
+
+  .section-tag-title {
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    color: var(--text-nav-header);
+  }
+
+  /* ==========================================================================
+    Ethan Chng Bento Grid (3-Column Asymmetric Layout)
+    ========================================================================== */
+  .craft-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.75rem;
+  }
+
+  /* Grid Column 1: Stacked Horizontal Cards */
+  .craft-col-left {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* Grid Column 2: Tall Vertical Showcase Card */
+  .craft-col-center {
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* Grid Column 3: Stacked Cards */
+  .craft-col-right {
+    display: flex;
+    flex-direction: column;
+    gap: 2rem;
+  }
+
+  /* ==========================================================================
+    Craft Project Card Component
+    ========================================================================== */
+  .craft-card {
+    display: flex;
+    flex-direction: column;
+    text-decoration: none;
+    color: inherit;
+    transition: transform var(--transition-normal);
+  }
+
+  .craft-card:hover {
+    transform: translateY(-2px);
+  }
+
+  .craft-card-media {
+    background-color: var(--bg-card);
+    border-radius: var(--radius-card);
+    border: 1px solid var(--border-subtle);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    transition: background-color var(--transition-normal), border-color var(--transition-normal);
+  }
+
+  .craft-card:hover .craft-card-media {
+    background-color: var(--bg-card-hover);
+    border-color: var(--text-secondary);
+  }
+
+  /* Card Aspect Ratios */
+  .media-horizontal {
+    height: 220px;
+    width: 100%;
+  }
+
+  .media-tall {
+    height: 480px;
+    width: 100%;
+  }
+
+  .media-logo-box {
+    height: 190px;
+    width: 100%;
+  }
+
+  /* Graphic Presentation inside Cards */
+  .circuit-render-preview {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    text-align: center;
+    padding: 1.5rem;
+  }
+
+  .circuit-icon {
+    width: 52px;
+    height: 52px;
+    stroke: var(--text-secondary);
+    stroke-width: 1.5;
+    fill: none;
+    opacity: 0.85;
+  }
+
+  .circuit-tag {
+    font-family: var(--font-mono);
+    font-size: 0.775rem;
+    color: var(--text-secondary);
+    background: var(--bg-primary);
+    border: 1px solid var(--border-subtle);
+    padding: 0.3rem 0.65rem;
+    border-radius: 4px;
+  }
+
+  /* Tall Device Mockup Frame */
+  .device-frame {
+    width: 82%;
+    height: 90%;
+    border: 2px solid var(--border-subtle);
+    border-radius: 28px;
+    background-color: var(--bg-primary);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 1rem 0.75rem;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, 0.04);
+    position: relative;
+    overflow: hidden;
+  }
+
+  .device-notch {
+    width: 60px;
+    height: 14px;
+    background: var(--border-subtle);
+    border-radius: var(--radius-full);
+    margin-bottom: 1.5rem;
+  }
+
+  .device-screen-content {
+    width: 100%;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    padding: 0.5rem;
+  }
+
+  .screen-trace-line {
+    height: 8px;
+    background: var(--bg-card);
+    border-radius: 4px;
+  }
+
+  .screen-trace-active {
+    background: var(--border-subtle);
+  }
+
+  /* Brand Typographic Card (Berkeleytime style) */
+  .brand-type-logo {
+    font-size: 1.85rem;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--text-primary);
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+  }
+
+  .brand-type-badge {
+    font-size: 0.75rem;
+    font-weight: 500;
+    letter-spacing: 0;
+    color: var(--text-tertiary);
+  }
+
+  /* Card Caption Underneath (Exact Ethan Chng formatting) */
+  .craft-card-caption {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-top: 0.85rem;
+    padding: 0 0.15rem;
+  }
+
+  .caption-left {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .craft-title {
+    font-size: 0.925rem;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    color: var(--text-primary);
+  }
+
+  .craft-sub {
+    font-size: 0.825rem;
+    color: var(--text-secondary);
+  }
+
+  .craft-year {
+    font-size: 0.825rem;
+    color: var(--text-tertiary);
+    font-family: var(--font-mono);
+  }
+
+  /* ==========================================================================
+    Lab Notes & Explorations ("IDEAS")
+    ========================================================================== */
+  .lab-list {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .lab-row {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    padding: 0.85rem 1rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-card);
+    transition: all var(--transition-normal);
+  }
+
+  .lab-row:hover {
+    background: var(--bg-card-hover);
+    border-color: var(--text-secondary);
+  }
+
+  .lab-row-title {
+    font-size: 0.925rem;
+    font-weight: 500;
+  }
+
+  .lab-row-tag {
+    font-size: 0.75rem;
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+  }
+
+  /* ==========================================================================
+    CV / Experience & Education
+    ========================================================================== */
+  .cv-table {
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+  }
+
+  .cv-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: 1.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border-divider);
+  }
+
+  .cv-row:last-child {
+    border-bottom: none;
+  }
+
+  .cv-year {
+    font-size: 0.825rem;
+    font-family: var(--font-mono);
+    color: var(--text-tertiary);
+  }
+
+  .cv-role {
+    font-size: 0.95rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  .cv-org {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+    margin-bottom: 0.35rem;
+  }
+
+  .cv-desc {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+    line-height: 1.5;
+  }
+
+  /* ==========================================================================
+    Responsive Breakpoints
+    ========================================================================== */
+  @media (max-width: 1024px) {
+    .site-wrapper {
+      gap: 3rem;
+      padding: 2rem 1.5rem 4rem;
+    }
+    .craft-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    .craft-col-center {
+      grid-column: span 2;
+    }
+    .media-tall {
+      height: 380px;
+    }
+  }
+
+  @media (max-width: 860px) {
+    .about-row {
+      grid-template-columns: 1fr;
+      gap: 1.75rem;
+    }
+    .about-row-reverse .about-media-col {
+      order: 2;
+    }
+    .about-row-reverse .about-text-col {
+      order: 1;
+    }
+  }
+
+  @media (max-width: 768px) {
+    .site-wrapper {
+      flex-direction: column;
+      gap: 2.5rem;
+      padding: 1.5rem 1.25rem 3rem;
+    }
+    .site-sidebar {
+      position: static;
+      width: 100%;
+      flex-direction: row;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid var(--border-divider);
+      padding-bottom: 1.5rem;
+    }
+    .sidebar-group:not(:first-child) {
+      display: none;
+    }
+    .craft-grid {
+      grid-template-columns: 1fr;
+    }
+    .craft-col-center {
+      grid-column: span 1;
+    }
+    .editorial-headline {
+      font-size: 1.65rem;
+    }
+  }

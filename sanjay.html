@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Sanjay Handwriting Animation</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #080808;
+    }
+
+    svg {
+      width: min(80vw, 650px);
+      height: auto;
+      overflow: visible;
+    }
+
+    .handwriting {
+      fill: none;
+      stroke: #ffffff;
+      stroke-width: 7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+
+      stroke-dasharray: 1;
+      stroke-dashoffset: 1;
+
+      animation: draw 3.5s ease-in-out forwards;
+    }
+
+    @keyframes draw {
+      to {
+        stroke-dashoffset: 0;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      .handwriting {
+        animation: none;
+        stroke-dashoffset: 0;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <svg
+    viewBox="0 0 600 180"
+    xmlns="http://www.w3.org/2000/svg"
+    role="img"
+    aria-label="sanjay"
+  >
+
+    <path
+      class="handwriting"
+      pathLength="1"
+      d="
+        M 90 95
+        C 115 65, 145 70, 125 90
+        C 110 105, 90 110, 110 120
+        C 130 130, 155 100, 170 90
+
+        C 145 110, 145 140, 170 120
+        C 190 100, 190 85, 175 90
+        C 160 95, 165 125, 190 115
+
+        C 205 105, 210 90, 220 90
+        C 235 90, 210 125, 230 120
+        C 245 115, 250 95, 260 90
+
+        C 275 80, 265 135, 250 150
+        C 235 165, 225 145, 250 130
+        C 280 110, 285 90, 300 90
+
+        C 275 110, 280 135, 305 120
+        C 325 100, 325 85, 310 90
+        C 295 95, 300 125, 325 115
+
+        C 340 100, 350 85, 365 90
+        C 380 100, 355 140, 340 150
+        C 325 160, 315 145, 340 130
+        C 370 110, 385 95, 400 95
+      "
+    />
+
+  </svg>
+
+</body>
+</html>
