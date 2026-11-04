@@ -8,6 +8,8 @@ document.addEventListener('DOMContentLoaded', () => {
   const heroSvg = document.querySelector('.hero-screen svg.hello__svg');
   const heroScreen = document.querySelector('#hero');
   const contentSection = document.querySelector('#content');
+  const siteSidebar = document.querySelector('.site-sidebar');
+  const mainCanvas = document.querySelector('.main-canvas');
   let isReplaying = false;
 
   // 1. Initial Calligraphy Draw Trigger on Page Load
@@ -98,60 +100,85 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (heroScreen && heroSvg && contentSection) {
-      // Pin hero during zoom scrub
+      // Set initial hidden & offset states for the split entrance
+      gsap.set(contentSection, { opacity: 0, y: 30 });
+      if (siteSidebar) gsap.set(siteSidebar, { x: -80, opacity: 0 });
+      if (mainCanvas) gsap.set(mainCanvas, { x: 80, opacity: 0 });
+
+      // Unified Apple Zoom & Split-Entrance Timeline
       const zoomTimeline = gsap.timeline({
         scrollTrigger: {
           trigger: '#hero',
           start: 'top top',
-          end: '+=120%',
+          end: '+=110%',
           pin: true,
           pinSpacing: false,
           scrub: 0.8,
         },
       });
 
-      // Zoom hero SVG toward camera through the central letter loop
+      // 1. Zoom hero SVG toward camera through the central letter loop
       zoomTimeline.to(
         heroSvg,
         {
-          scale: 24,
+          scale: 26,
           transformOrigin: '48% 54%',
           ease: 'power2.in',
+          duration: 0.65,
         },
         0
       );
 
-      // Fade out the SVG as it expands beyond screen bounds
+      // 2. Fade out the SVG as it expands beyond screen bounds
       zoomTimeline.to(
         heroSvg,
         {
           opacity: 0,
           ease: 'power1.in',
+          duration: 0.35,
         },
-        0.25
+        0.3
       );
 
-      // Content section blooms forward through the zoom
-      gsap.fromTo(
+      // 3. Content section fades in smoothly just before hello fully finishes
+      zoomTimeline.to(
         contentSection,
         {
-          scale: 0.92,
-          opacity: 0,
-          y: 60,
-        },
-        {
-          scale: 1,
           opacity: 1,
           y: 0,
-          ease: 'power1.out',
-          scrollTrigger: {
-            trigger: '#content',
-            start: 'top bottom-=20%',
-            end: 'top top+=80',
-            scrub: 0.6,
-          },
-        }
+          ease: 'power2.out',
+          duration: 0.55,
+        },
+        0.45
       );
+
+      // 4. Sidebar glides out smoothly from the left side
+      if (siteSidebar) {
+        zoomTimeline.to(
+          siteSidebar,
+          {
+            x: 0,
+            opacity: 1,
+            ease: 'power2.out',
+            duration: 0.55,
+          },
+          0.48
+        );
+      }
+
+      // 5. Main Canvas glides in smoothly from the right side
+      if (mainCanvas) {
+        zoomTimeline.to(
+          mainCanvas,
+          {
+            x: 0,
+            opacity: 1,
+            ease: 'power2.out',
+            duration: 0.55,
+          },
+          0.48
+        );
+      }
 
       // Replay Hello animation when scrolling back to the very top
       let hasLeftTop = false;
@@ -159,22 +186,14 @@ document.addEventListener('DOMContentLoaded', () => {
       ScrollTrigger.create({
         trigger: '#hero',
         start: 'top top',
-        end: '+=60%',
+        end: '+=40%',
         onLeave: () => {
           hasLeftTop = true;
         },
         onEnterBack: () => {
           if (hasLeftTop) {
             hasLeftTop = false;
-            // Fully restore SVG visibility and scale, then replay calligraphy
-            gsap.to(heroSvg, {
-              scale: 1,
-              opacity: 1,
-              duration: 0.4,
-              onComplete: () => {
-                replayHelloAnimation();
-              },
-            });
+            replayHelloAnimation();
           }
         },
       });
